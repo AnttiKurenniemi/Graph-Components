@@ -11,6 +11,14 @@ variations that I'm working on and will probably publish at a later time, if I g
 The repository contains a sample app and the actual component. The component is a single file, "BarChartGraphic.cs",
 which you just plonk on to your Winforms app and use. No packages, no installers, no nothing.
 
+![Sample app](/images/BarChart_SampleApp.png)
+
 ## License
 
 Do whatever you want with it.
+
+## Test project
+
+There are no tests at the moment; the test project is something I'm stuck with. I'd like to test the 
+calculations of the drawing, but it's all private stuff and I don't know how much effort I want to 
+put into surfacing it. Maybe later, gator.

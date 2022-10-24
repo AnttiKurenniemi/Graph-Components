@@ -5,7 +5,12 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphing Component Sample", "Graphing Component Sample\Graphing Component Sample.csproj", "{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphing Component SampleTests", "Graphing Component SampleTests\Graphing Component SampleTests.csproj", "{9D032762-F295-45D9-9287-8CC45C06F00E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphing Component SampleTests", "Graphing Component SampleTests\Graphing Component SampleTests.csproj", "{9D032762-F295-45D9-9287-8CC45C06F00E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AA3C477-F042-4904-9EA1-CE9FDBAA6947}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
