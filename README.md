@@ -11,7 +11,7 @@ variations that I'm working on and will probably publish at a later time, if I g
 The repository contains a sample app and the actual component. The component is a single file, "BarChartGraphic.cs",
 which you just plonk on to your Winforms app and use. No packages, no installers, no nothing.
 
-![Sample app](/images/BarChart_SampleApp.png)
+![Sample app](/Graphing Component Sample/images/BarChart_SampleApp.png)
 
 ## License
 
