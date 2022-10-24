@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphing Component Sample", "Graphing Component Sample\Graphing Component Sample.csproj", "{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphing Component SampleTests", "Graphing Component SampleTests\Graphing Component SampleTests.csproj", "{9D032762-F295-45D9-9287-8CC45C06F00E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64492241-6A9E-40B5-9FB3-8E1BBADBE4BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D032762-F295-45D9-9287-8CC45C06F00E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D032762-F295-45D9-9287-8CC45C06F00E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D032762-F295-45D9-9287-8CC45C06F00E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D032762-F295-45D9-9287-8CC45C06F00E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F510442E-ECA4-4CF6-AFC4-048262FC5C9D}
+	EndGlobalSection
+EndGlobal
