@@ -1,6 +1,6 @@
 # Graph-Components
 
-This repository contains a Bar Chart component for Winforms. IThis component started life as something quick 
+This repository contains a Bar Chart component for Winforms. This component started life as something quick 
 and simple I needed for a project - everything I found online at that time was either too big and complex
 (read: I was lazy and did not want to learn how to use them) or required registration or some such. So I did
 what all smartypants-developers do: I made my own.
