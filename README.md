@@ -13,6 +13,32 @@ which you just plonk on to your Winforms app and use. No packages, no installers
 
 ![Sample app](https://github.com/AnttiKurenniemi/Graph-Components/blob/master/Graphing%20Component%20Sample/Images/BarChart_SampleApp.png)
 
+## Usage
+
+Really simple, build your project once with the code included, and then add the values in code:
+
+    barChart.AssignValue("First", 10);
+    barChart.AssignValue("Second", 23);
+
+The AssignValue method takes two parameters, key and value. Key will be displayed in the legend, so keep it
+fairly short. If you add a new value with a key that already exists, only the value will be updated - no
+duplicate keys will be added.
+
+The chart does not auto-render! I did this on purpose, because when adding a bunch of stuff I didn't want it
+to constantly repaint. In order to actually see your values, call Redraw method after you have added and/or
+modified the values:
+
+    barChart.Redraw();
+    
+If you want to highlight a bar, set the HighlightedValue to the key you want to highlight:
+
+    barChar.HighlightedValue = "First";
+
+Remember to call Redraw after setting the highlighted value. To remove highlighting, set it to empty:
+
+    barChar.HighlightedValue = "";
+
+
 ## License
 
 Do whatever you want with it.
