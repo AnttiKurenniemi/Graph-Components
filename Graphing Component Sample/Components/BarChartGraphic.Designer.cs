@@ -1,4 +1,4 @@
-﻿namespace BRS.Components
+﻿namespace NRS.Components
 {
     partial class BarChartGraphic
     {

@@ -1,12 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BRS.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BRS.Components.Tests
+namespace NRS.Components.Tests
 {
     [TestClass()]
     public class BarChartGraphicTests

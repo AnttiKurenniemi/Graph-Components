@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.barChart2 = new BRS.Components.BarChartGraphic();
-            this.barChart1 = new BRS.Components.BarChartGraphic();
-            this.barChart3 = new BRS.Components.BarChartGraphic();
+            this.barChart2 = new NRS.Components.BarChartGraphic();
+            this.barChart1 = new NRS.Components.BarChartGraphic();
+            this.barChart3 = new NRS.Components.BarChartGraphic();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -50,6 +50,8 @@
             // 
             // barChart1
             // 
+            this.barChart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.barChart1.HighlightedValue = "";
             this.barChart1.HighlightNegativeValues = true;
             this.barChart1.Location = new System.Drawing.Point(12, 46);
@@ -59,6 +61,8 @@
             // 
             // barChart3
             // 
+            this.barChart3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.barChart3.HighlightedValue = "";
             this.barChart3.HighlightNegativeValues = true;
             this.barChart3.Location = new System.Drawing.Point(1348, 46);
@@ -114,9 +118,9 @@
 
         #endregion
 
-        private BRS.Components.BarChartGraphic barChart2;
-        private BRS.Components.BarChartGraphic barChart1;
-        private BRS.Components.BarChartGraphic barChart3;
+        private NRS.Components.BarChartGraphic barChart2;
+        private NRS.Components.BarChartGraphic barChart1;
+        private NRS.Components.BarChartGraphic barChart3;
         private Label label1;
         private Label label2;
         private Label label3;

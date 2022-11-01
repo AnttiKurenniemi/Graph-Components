@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BRS.Components
+namespace NRS.Components
 {
     /// <summary>
     /// Bar chart graphic control. Can draw one or more bar graphs displaying values below the chart area.
@@ -133,8 +133,6 @@ namespace BRS.Components
                 // Must dispose of backbufferGraphics before we dispose of backbufferContext or there will be an exception.
                 if (backbufferGraphics != null)
                     backbufferGraphics.Dispose();
-                //if (backbufferContext != null)
-                //    backbufferContext.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -166,6 +164,17 @@ namespace BRS.Components
                 valueDictionary.Add(key, value);
             }
         }
+
+
+
+        /// <summary>
+        /// Clear the key-value pairs list completely.
+        /// </summary>
+        public void Clear()
+        {
+            valueDictionary.Clear();
+        }
+
 
 
         /// <summary>
@@ -317,19 +326,30 @@ namespace BRS.Components
                 drawingGraphics.FillRectangle(barFillBrush, filledRect);
 
 
+            // Draw the legend (keys) below the grapg
+            DrawLegend(key, value, zeroLineY, barRectangle, legendRectangle, barTop);
+        }
 
 
 
-
-
-            // Legend:
+        /// <summary>
+        /// Draw legend below the grapg
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="zeroLineY"></param>
+        /// <param name="barRectangle"></param>
+        /// <param name="legendRectangle"></param>
+        /// <param name="barTop"></param>
+        private void DrawLegend(string key, double value, int zeroLineY, Rectangle barRectangle, Rectangle legendRectangle, double barTop)
+        {
             string valueString = value.ToString("0.00");
             SizeF valueStringSize = new SizeF(drawingGraphics.MeasureString(valueString, legendFont));
 
             // Top should be the top of the bar:
             double legendLeft = (barRectangle.Width / 2) - (valueStringSize.Width / 2) + barRectangle.Left;
             double legendTop = barTop + 5;   // Slight padding to show the bar behind the legend
-            
+
             if (MinimumValue >= 0)
             {
                 if ((legendTop + valueStringSize.Height) > barRectangle.Height)
@@ -345,7 +365,7 @@ namespace BRS.Components
                     legendTop = zeroLineY - (valueStringSize.Height + 2);
                 }
             }
-            
+
             Rectangle txtRect = new Rectangle(Convert.ToInt32(legendLeft),
                 Convert.ToInt32(legendTop),
                 Convert.ToInt32(valueStringSize.Width),
