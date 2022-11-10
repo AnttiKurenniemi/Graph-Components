@@ -15,6 +15,7 @@ namespace Graphing_Component_Sample
             // Some data for the graphic:
             barChart1.AssignValue("First", 10);
             barChart1.AssignValue("Second", 20);
+            barChart1.PositiveFillColor = Color.Green;
             
             
             barChart2.AssignValue("First", 10);
