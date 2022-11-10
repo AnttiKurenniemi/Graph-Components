@@ -22,15 +22,37 @@ namespace NRS.Components
         private double HeightMultiplier = 1;
         private int YAxisTextHeight = 50;
 
+        /// <summary>Zero-line Y coordinate. At the bottom if only positive values; at top if only negatives and somewhere
+        /// in the middle if both values exist</summary>
+        int zeroLineY = 0;
+
+
 
         // Colors:
         readonly Color backgroundColor = Color.White;
         readonly Pen borderPen_Dark = new Pen(Color.DarkGray, 1);
 
 
+        private Brush barFillBrush;
+        private Brush negativeFillBrush;
+
         // Main bar drawing color:
-        readonly Brush barFillBrush = new SolidBrush(Color.Blue);
-        readonly Brush negativeFillBrush = new SolidBrush(Color.DarkRed);
+        private Color _positiveFillColor = Color.Blue;
+        [Description("Fill color for a postive value bar. Default is Blue."), Category("Appearance")]
+        public Color PositiveFillColor 
+        {
+            get { return _positiveFillColor; }
+            set { _positiveFillColor = value; barFillBrush = new SolidBrush(value); } 
+        }
+
+        private Color _negativeFillColor = Color.DarkRed;
+        [Description("Fill color for a negative value bar. Default is DarkRed."), Category("Appearance")]
+        public Color NegativeFillColor 
+        {
+            get { return _negativeFillColor; }
+            set { _negativeFillColor = value; negativeFillBrush = new SolidBrush(value); } 
+        }
+
         readonly Brush highlightedBarFillBrush = new SolidBrush(Color.SeaGreen);
         readonly Brush backgroundFillBrush = new SolidBrush(Color.LightGray);
 
@@ -77,6 +99,11 @@ namespace NRS.Components
             initializationComplete = true;
 
             RecreateBuffers();
+
+            // Colors to Brushes:
+            barFillBrush = new SolidBrush(_positiveFillColor);
+            negativeFillBrush = new SolidBrush(_negativeFillColor);
+
 
             Redraw();
         }
@@ -253,7 +280,6 @@ namespace NRS.Components
             int barAreaWidth = Convert.ToInt32((this.Width - 3) / valueDictionary.Count);
 
             // if MinimumValue < 0, draw "zero line"
-            int zeroLineY = 0;
             if (MinimumValue < 0)
                 zeroLineY = Convert.ToInt32((this.Height - (YAxisTextHeight + 2)) + (MinimumValue * HeightMultiplier));
             if (zeroLineY < 0)
@@ -265,10 +291,11 @@ namespace NRS.Components
             {
                 int left = Convert.ToInt32((((this.Width - 3) / valueDictionary.Count) * i)) + 1 + i;
                 Rectangle rct = new Rectangle(left, 1, barAreaWidth, this.Height - 2);
-                DrawSingleBar(rct, bar.Key, bar.Value, zeroLineY);
+                DrawSingleBar(rct, bar.Key, bar.Value);
                 i++;
             }
 
+            // This is the "Zero line" between positive and negative values
             if (MinimumValue < 0)
                 drawingGraphics.DrawLine(borderPen_Dark, 0, zeroLineY, this.Width, zeroLineY);
         }
@@ -280,8 +307,7 @@ namespace NRS.Components
         /// </summary>
         /// <param name="rct">Rectangle of the area within which the current bar should be drawn INCLUDING the legend at the bottom</param>
         /// <param name="key"></param>
-        /// <param name="value">How much free space remains, in percentage.</param>
-        private void DrawSingleBar(Rectangle rct, string key, double value, int zeroLineY)
+        private void DrawSingleBar(Rectangle rct, string key, double value)
         {
             // Separate the bar area rectangle and the bottom legend area rectangle:
             Rectangle barRectangle = new Rectangle(rct.Left, rct.Top, rct.Width, rct.Height - YAxisTextHeight);
@@ -302,6 +328,7 @@ namespace NRS.Components
             {
                 // Negative bar, below the "zero line"
                 barTop = zeroLineY + 1;
+                barHeight--;
             }
             else
             {
@@ -327,7 +354,7 @@ namespace NRS.Components
 
 
             // Draw the legend (keys) below the grapg
-            DrawLegend(key, value, zeroLineY, barRectangle, legendRectangle, barTop);
+            DrawLegend(key, value, barRectangle, legendRectangle, barTop);
         }
 
 
@@ -335,13 +362,7 @@ namespace NRS.Components
         /// <summary>
         /// Draw legend below the grapg
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="zeroLineY"></param>
-        /// <param name="barRectangle"></param>
-        /// <param name="legendRectangle"></param>
-        /// <param name="barTop"></param>
-        private void DrawLegend(string key, double value, int zeroLineY, Rectangle barRectangle, Rectangle legendRectangle, double barTop)
+        private void DrawLegend(string key, double value, Rectangle barRectangle, Rectangle legendRectangle, double barTop)
         {
             string valueString = value.ToString("0.00");
             SizeF valueStringSize = new SizeF(drawingGraphics.MeasureString(valueString, legendFont));
@@ -385,7 +406,7 @@ namespace NRS.Components
                 Convert.ToInt32(keyStringSize.Width),
                 Convert.ToInt32(keyStringSize.Height));
 
-            // Value string:
+            // Key (name of the bar) string:
             drawingGraphics.DrawString(key, legendFont, legendTextBrush, keyRect.Left, keyRect.Top);
         }
     }

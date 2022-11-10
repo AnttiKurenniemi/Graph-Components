@@ -43,9 +43,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.barChart2.HighlightedValue = "";
             this.barChart2.HighlightNegativeValues = true;
-            this.barChart2.Location = new System.Drawing.Point(553, 46);
+            this.barChart2.Location = new System.Drawing.Point(940, 75);
+            this.barChart2.Margin = new System.Windows.Forms.Padding(5);
             this.barChart2.Name = "barChart2";
-            this.barChart2.Size = new System.Drawing.Size(659, 686);
+            this.barChart2.Size = new System.Drawing.Size(1120, 1078);
             this.barChart2.TabIndex = 0;
             // 
             // barChart1
@@ -54,9 +55,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.barChart1.HighlightedValue = "";
             this.barChart1.HighlightNegativeValues = true;
-            this.barChart1.Location = new System.Drawing.Point(12, 46);
+            this.barChart1.Location = new System.Drawing.Point(20, 75);
+            this.barChart1.Margin = new System.Windows.Forms.Padding(5);
             this.barChart1.Name = "barChart1";
-            this.barChart1.Size = new System.Drawing.Size(416, 686);
+            this.barChart1.Size = new System.Drawing.Size(707, 1078);
             this.barChart1.TabIndex = 1;
             // 
             // barChart3
@@ -65,49 +67,55 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.barChart3.HighlightedValue = "";
             this.barChart3.HighlightNegativeValues = true;
-            this.barChart3.Location = new System.Drawing.Point(1348, 46);
+            this.barChart3.Location = new System.Drawing.Point(2292, 75);
+            this.barChart3.Margin = new System.Windows.Forms.Padding(5);
             this.barChart3.Name = "barChart3";
-            this.barChart3.Size = new System.Drawing.Size(435, 686);
+            this.barChart3.Size = new System.Drawing.Size(740, 1078);
             this.barChart3.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 18);
+            this.label1.Location = new System.Drawing.Point(20, 30);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(266, 25);
+            this.label1.Size = new System.Drawing.Size(441, 41);
             this.label1.TabIndex = 3;
             this.label1.Text = "A chart with only positive values";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(553, 18);
+            this.label2.Location = new System.Drawing.Point(940, 30);
+            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(233, 25);
+            this.label2.Size = new System.Drawing.Size(388, 41);
             this.label2.TabIndex = 4;
             this.label2.Text = "Positive and negative values";
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1348, 18);
+            this.label3.Location = new System.Drawing.Point(2292, 30);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(175, 25);
+            this.label3.Size = new System.Drawing.Size(291, 41);
             this.label3.TabIndex = 5;
             this.label3.Text = "Only negative values";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1795, 734);
+            this.ClientSize = new System.Drawing.Size(3052, 1204);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.barChart3);
             this.Controls.Add(this.barChart1);
             this.Controls.Add(this.barChart2);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MainForm";
             this.Text = "Bar Graph component - sample app";
             this.Load += new System.EventHandler(this.MainForm_Load);
