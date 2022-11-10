@@ -33,7 +33,7 @@ namespace NRS.Components
         readonly Pen borderPen_Dark = new Pen(Color.DarkGray, 1);
 
 
-        private Brush barFillBrush;
+        private Brush positiveFillBrush;
         private Brush negativeFillBrush;
 
         // Main bar drawing color:
@@ -42,7 +42,7 @@ namespace NRS.Components
         public Color PositiveFillColor 
         {
             get { return _positiveFillColor; }
-            set { _positiveFillColor = value; barFillBrush = new SolidBrush(value); } 
+            set { _positiveFillColor = value; positiveFillBrush = new SolidBrush(value); } 
         }
 
         private Color _negativeFillColor = Color.DarkRed;
@@ -62,12 +62,16 @@ namespace NRS.Components
         readonly Brush legendTextBrush = new SolidBrush(Color.Black);
         readonly Font legendFont = new Font("Tahoma", 8);
 
-   
+
+        /// <summary>Flag to set if we want a selected key to be drawn with different color</summary>
+        public bool HighlightNegativeValues { get; set; } = true;
+        
         /// <summary>Highlighted value; if set and the value is found from the valueDictionary, fill with different color</summary>
         public string HighlightedValue { get; set; } = "";
 
+        /// <summary>Internal list of key-value pairs to draw</summary>
+        private Dictionary<string, double> valueDictionary = new Dictionary<string, double>();
 
-        public bool HighlightNegativeValues { get; set; } = true;
 
         // Following variables are used by the double-buffered drawing:
         private bool initializationComplete;
@@ -76,8 +80,6 @@ namespace NRS.Components
         private BufferedGraphics backbufferGraphics;
         private Graphics drawingGraphics;
 
-        // Internal list of key-value pairs to draw
-        private Dictionary<string, double> valueDictionary = new Dictionary<string, double>();
 
 
 
@@ -101,7 +103,7 @@ namespace NRS.Components
             RecreateBuffers();
 
             // Colors to Brushes:
-            barFillBrush = new SolidBrush(_positiveFillColor);
+            positiveFillBrush = new SolidBrush(_positiveFillColor);
             negativeFillBrush = new SolidBrush(_negativeFillColor);
 
 
@@ -221,6 +223,7 @@ namespace NRS.Components
             }
             else
             {
+                // Some abstract defaults
                 MaximumValue = 100;
                 MinimumValue = 0;
             }
@@ -259,7 +262,6 @@ namespace NRS.Components
             drawingGraphics.DrawLine(borderPen_Dark, 0, 0, this.Width - 1, 0);                               // Top left - top right
             drawingGraphics.DrawLine(borderPen_Dark, this.Width - 1, 0, this.Width - 1, this.Height - 1);    // top right - bottom right
             drawingGraphics.DrawLine(borderPen_Dark, 0, this.Height - 1, 0, 0);                             // bottom left - top left
-            drawingGraphics.DrawLine(borderPen_Dark, 0, this.Height - (YAxisTextHeight + 1), this.Width - 1, this.Height - (YAxisTextHeight + 1));  // Between legend area (bottom) and actual bars
             drawingGraphics.DrawLine(borderPen_Dark, 0, this.Height - 1, this.Width - 1, this.Height - 1);  // bottom left - bottom right
 
             this.Refresh();
@@ -275,6 +277,10 @@ namespace NRS.Components
             // Have anything to draw?
             if (valueDictionary == null || valueDictionary.Count < 1)
                 return;
+
+            // Horizontal line between legend area (bottom) and actual bars
+            drawingGraphics.DrawLine(borderPen_Dark, 0, this.Height - (YAxisTextHeight + 1), this.Width - 1, this.Height - (YAxisTextHeight + 1));  
+
 
             // Width of a single bar (the actual bar + space on both sizes=
             int barAreaWidth = Convert.ToInt32((this.Width - 3) / valueDictionary.Count);
@@ -302,11 +308,10 @@ namespace NRS.Components
 
 
 
-        /// <summary>
-        /// Draw a "bar" on the chart.
-        /// </summary>
+        /// <summary>Draw a "bar" on the chart.</summary>
         /// <param name="rct">Rectangle of the area within which the current bar should be drawn INCLUDING the legend at the bottom</param>
-        /// <param name="key"></param>
+        /// <param name="key">Identifier of the bar to be drawn</param>
+        /// <param name="value">Value of the bar to be drawn</param>
         private void DrawSingleBar(Rectangle rct, string key, double value)
         {
             // Separate the bar area rectangle and the bottom legend area rectangle:
@@ -350,7 +355,7 @@ namespace NRS.Components
             else if (value < 0 && HighlightNegativeValues)
                 drawingGraphics.FillRectangle(negativeFillBrush, filledRect);
             else
-                drawingGraphics.FillRectangle(barFillBrush, filledRect);
+                drawingGraphics.FillRectangle(positiveFillBrush, filledRect);
 
 
             // Draw the legend (keys) below the grapg
@@ -387,6 +392,7 @@ namespace NRS.Components
                 }
             }
 
+            // Value rectangle:
             Rectangle txtRect = new Rectangle(Convert.ToInt32(legendLeft),
                 Convert.ToInt32(legendTop),
                 Convert.ToInt32(valueStringSize.Width),
@@ -397,17 +403,24 @@ namespace NRS.Components
             // Value string:
             drawingGraphics.DrawString(valueString, legendFont, legendTextBrush, txtRect.Left, txtRect.Top);
 
+
             // Legend text at the bottom, below the bars:
             SizeF keyStringSize = new SizeF(drawingGraphics.MeasureString(key, legendFont));
             double keyStringLeft = (barRectangle.Width / 2) - (keyStringSize.Width / 2) + barRectangle.Left;
             double keyStringTop = (legendRectangle.Height / 2) - (keyStringSize.Height / 2) + barRectangle.Height + 5;
-            Rectangle keyRect = new Rectangle(Convert.ToInt32(keyStringLeft),
-                Convert.ToInt32(keyStringTop),
-                Convert.ToInt32(keyStringSize.Width),
-                Convert.ToInt32(keyStringSize.Height));
 
-            // Key (name of the bar) string:
-            drawingGraphics.DrawString(key, legendFont, legendTextBrush, keyRect.Left, keyRect.Top);
+            // Only draw the "Key" if it fits - this could be a bit smarter, maybe reduce the font size first or something...
+            if (keyStringLeft >= barRectangle.Left)
+            {
+                // Rectangle (border) inside which the Key (name) is drawn:
+                Rectangle keyRect = new Rectangle(Convert.ToInt32(keyStringLeft),
+                    Convert.ToInt32(keyStringTop),
+                    Convert.ToInt32(keyStringSize.Width),
+                    Convert.ToInt32(keyStringSize.Height));
+
+                // Key (name of the bar) string:
+                drawingGraphics.DrawString(key, legendFont, legendTextBrush, keyRect.Left, keyRect.Top);
+            }
         }
     }
 }
