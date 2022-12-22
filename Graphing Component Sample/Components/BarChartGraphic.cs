@@ -72,6 +72,8 @@ namespace NRS.Components
         /// <summary>Internal list of key-value pairs to draw</summary>
         private Dictionary<string, double> valueDictionary = new Dictionary<string, double>();
 
+        /// <summary>This value is used to determine if the legend (key) string can fit in the area it is drawn in</summary>
+        private double LastDrawnLegendX;
 
         // Following variables are used by the double-buffered drawing:
         private bool initializationComplete;
@@ -255,6 +257,8 @@ namespace NRS.Components
             // Calculate the height multiplier:
             HeightMultiplier = (this.Height - (YAxisTextHeight + 1)) / (MaximumValue - MinimumValue);
 
+            LastDrawnLegendX = -1;
+
             DrawGraph();
 
 
@@ -363,6 +367,14 @@ namespace NRS.Components
         }
 
 
+        private bool LegendFits(double leftEdge)
+        {
+            // If desired left edge is more to the right than last drawn value, it should fit:
+            if (leftEdge > LastDrawnLegendX)
+                return true;
+            else
+                return false;
+        }
 
         /// <summary>
         /// Draw legend below the grapg
@@ -409,9 +421,11 @@ namespace NRS.Components
             double keyStringLeft = (barRectangle.Width / 2) - (keyStringSize.Width / 2) + barRectangle.Left;
             double keyStringTop = (legendRectangle.Height / 2) - (keyStringSize.Height / 2) + barRectangle.Height + 5;
 
-            // Only draw the "Key" if it fits - this could be a bit smarter, maybe reduce the font size first or something...
-            if (keyStringLeft >= barRectangle.Left)
+            // Only draw the "Key" if it fits
+            if (LegendFits(keyStringLeft))
             {
+                LastDrawnLegendX = keyStringLeft + keyStringSize.Width;
+
                 // Rectangle (border) inside which the Key (name) is drawn:
                 Rectangle keyRect = new Rectangle(Convert.ToInt32(keyStringLeft),
                     Convert.ToInt32(keyStringTop),
