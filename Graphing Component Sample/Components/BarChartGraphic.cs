@@ -28,6 +28,8 @@ namespace NRS.Components
 
 
         // Average and moving average values:
+        public bool ShowAverageLine { get; set; } = false;
+        public bool ShowMovingAverageLine { get; set; } = false;
         private double averageValue = 0;
         private Rectangle averageFirstRectangle;
         private int movingAverageCount = 0;
@@ -332,7 +334,7 @@ namespace NRS.Components
                 DrawSingleBar(rct, bar.Key, bar.Value);
 
                 // Moving average - nothing to draw for the first bar, only after it
-                if (i > 0)
+                if (i > 0 && ShowMovingAverageLine == true)
                     DrawMovingAverageLine(rct);
                 movingAveragePreviousRectangle = new Rectangle(rct.X, rct.Y, rct.Width, rct.Height);
 
@@ -343,7 +345,8 @@ namespace NRS.Components
             if (MinimumValue < 0)
                 drawingGraphics.DrawLine(borderPen_Dark, 0, zeroLineY, this.Width, zeroLineY);
 
-            DrawAverageLine();
+            if (ShowAverageLine == true)
+                DrawAverageLine();
         }
 
 
