@@ -27,11 +27,20 @@ namespace NRS.Components
         int zeroLineY = 0;
 
 
+        // Average and moving average values:
+        private double averageValue = 0;
+        private Rectangle averageFirstRectangle;
+        private int movingAverageCount = 0;
+        private double movingAverageSum = 0;
+        private double movingAverageValue = 0;
+        private double movingAveragePreviousValue = 0;
+        private Rectangle movingAveragePreviousRectangle;
 
         // Colors:
-        readonly Color backgroundColor = Color.White;
-        readonly Pen borderPen_Dark = new Pen(Color.DarkGray, 1);
-
+        private readonly Color backgroundColor = Color.White;
+        private readonly Pen borderPen_Dark = new Pen(Color.DarkGray, 1);
+        private readonly Pen AveragePen = new Pen(Color.MediumOrchid, 2);
+        private readonly Pen MovingAveragePen = new Pen(Color.DarkOliveGreen, 2);
 
         private Brush positiveFillBrush;
         private Brush negativeFillBrush;
@@ -222,12 +231,14 @@ namespace NRS.Components
                 MinimumValue = valueDictionary.Values.Min();
                 if (MinimumValue > 0)
                     MinimumValue = 0;
+                averageValue = valueDictionary.Values.Average();
             }
             else
             {
                 // Some abstract defaults
                 MaximumValue = 100;
                 MinimumValue = 0;
+                averageValue = 0;
             }
         }
 
@@ -258,6 +269,13 @@ namespace NRS.Components
             HeightMultiplier = (this.Height - (YAxisTextHeight + 1)) / (MaximumValue - MinimumValue);
 
             LastDrawnLegendX = -1;
+
+            // Moving Average values:
+            movingAverageCount = 0;
+            movingAverageSum = 0;
+            movingAverageValue = 0;
+            movingAveragePreviousValue = 0;
+
 
             DrawGraph();
 
@@ -297,19 +315,77 @@ namespace NRS.Components
 
             // Loop over all values and draw a graph for each
             int i = 0;
+            Rectangle rct = new Rectangle();
             foreach (KeyValuePair<string, double> bar in valueDictionary)
             {
                 int left = Convert.ToInt32((((this.Width - 3) / valueDictionary.Count) * i)) + 1 + i;
-                Rectangle rct = new Rectangle(left, 1, barAreaWidth, this.Height - 2);
+                rct = new Rectangle(left, 1, barAreaWidth, this.Height - 2);
+
+                if (i == 0)
+                    averageFirstRectangle = new Rectangle(rct.X, rct.Y, rct.Width, rct.Height);
+
+                movingAverageCount++;
+                movingAverageSum += bar.Value;
+                movingAveragePreviousValue = movingAverageValue;
+                movingAverageValue = movingAverageSum / movingAverageCount;
+
                 DrawSingleBar(rct, bar.Key, bar.Value);
+
+                // Moving average - nothing to draw for the first bar, only after it
+                if (i > 0)
+                    DrawMovingAverageLine(rct);
+                movingAveragePreviousRectangle = new Rectangle(rct.X, rct.Y, rct.Width, rct.Height);
+
                 i++;
             }
 
             // This is the "Zero line" between positive and negative values
             if (MinimumValue < 0)
                 drawingGraphics.DrawLine(borderPen_Dark, 0, zeroLineY, this.Width, zeroLineY);
+
+            DrawAverageLine();
         }
 
+
+        /// <summary>
+        /// Draw the moving average line, from previous rectange to this one
+        /// </summary>
+        /// <param name="rct"></param>
+        private void DrawMovingAverageLine(Rectangle rct)
+        {
+            // Previous bar is in "movingAveragePreviousRectangle"
+            int previousX = movingAveragePreviousRectangle.Left + (movingAveragePreviousRectangle.Width / 2);
+            int previousY = YFromValue(movingAveragePreviousValue);
+            int currentX = rct.Left + (rct.Width / 2);
+            int currentY = YFromValue(movingAverageValue);
+            drawingGraphics.DrawLine(MovingAveragePen, previousX, previousY, currentX, currentY);
+        }
+
+
+        private void DrawAverageLine()
+        {
+            int averageY = YFromValue(averageValue);
+            drawingGraphics.DrawLine(AveragePen, 2, averageY, this.Width - 3, averageY);
+        }
+
+
+        private int YFromValue(double value)
+        {
+            double tmpDistanceFromZero = (Math.Abs(value) * HeightMultiplier);
+            
+            
+            // Negative value
+            if (value < 0)
+                return (int)tmpDistanceFromZero + zeroLineY;
+            else
+            {
+                // Positive valu
+                if (MinimumValue < 0)
+                    return (int)(zeroLineY - tmpDistanceFromZero);
+                else
+                    return (int)((this.Height - YAxisTextHeight) - (value * HeightMultiplier));
+            }
+        }
 
 
         /// <summary>Draw a "bar" on the chart.</summary>
